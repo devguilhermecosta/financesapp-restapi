@@ -38,7 +38,7 @@ class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request: Request, *args, **kwargs) -> Response:
         data = request.data
         data["refresh"] = request.COOKIES.get('token_refresh', 'invalid token')
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=data)
 
         try:
             serializer.is_valid(raise_exception=True)
