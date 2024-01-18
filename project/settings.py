@@ -147,7 +147,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "UPDATE_LAST_LOGIN": True,
 
-    "TOKEN_REFRESH_SERIALIZER": "project.views.CustomTokenRefreshSerializer",
+    "TOKEN_REFRESH_SERIALIZER": "utils.serializers.CustomTokenRefreshSerializer",
 }
 
 CORS_ALLOW_ALL_ORIGINS = True

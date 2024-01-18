@@ -1,11 +1,10 @@
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
-from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import status
-from typing import override, Dict, Any
+from typing import override
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -25,16 +24,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         return response
 
 
-class CustomTokenRefreshSerializer(TokenRefreshSerializer):
-    @override
-    def validate(self, attrs: Dict[str, Any]) -> Dict[str, str]:
-        super().validate(attrs)
-        refresh = self.token_class(attrs["refresh"])
-        data = {"access": str(refresh.access_token)}
-        return data
-
-
 class CustomTokenRefreshView(TokenRefreshView):
+    @override
     def post(self, request: Request, *args, **kwargs) -> Response:
         data = request.data
         data["refresh"] = request.COOKIES.get('token_refresh', 'invalid token')
