@@ -19,6 +19,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             key='token_refresh',
             value=data.get('refresh'),
             httponly=True,
+            samesite='Strict',
         )
 
         return response
