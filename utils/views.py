@@ -57,6 +57,7 @@ class CustomTokenRefreshView(TokenRefreshView):
         data = request.data
         data["refresh"] = request.COOKIES.get('token_refresh', 'invalid token')
         serializer = self.get_serializer(data=data)
+        csrf.get_token(request)
 
         try:
             serializer.is_valid(raise_exception=True)
