@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
 from .models import User
 from .serializers import UserSerializer
 
@@ -17,6 +19,8 @@ class UserMixin:
 
 
 class UserRegisterAPIView(APIView, UserMixin):
+    permission_classes = [IsAuthenticated]
+
     def get_object(self, pk: int) -> User:
         user = get_object_or_404(
             User,
@@ -25,6 +29,7 @@ class UserRegisterAPIView(APIView, UserMixin):
         self.check_object_permissions(self.request, user)
         return user
 
+    @method_decorator(csrf_protect)
     def post(self, *args, **kwargs) -> Response:
         serializer = UserSerializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
@@ -54,6 +59,7 @@ class UserDetailAPIView(APIView, UserMixin):
             status=status.HTTP_200_OK,
         )
 
+    @method_decorator(csrf_protect)
     def patch(self, *args, **kwargs) -> Response:
         user = self.get_object(kwargs.get('id', None))
         data = self.request.data
@@ -65,6 +71,7 @@ class UserDetailAPIView(APIView, UserMixin):
             status=status.HTTP_204_NO_CONTENT,
         )
 
+    @method_decorator(csrf_protect)
     def delete(self, *args, **kwargs) -> Response:
         user = self.get_object(kwargs.get('id', None))
         user.delete()
