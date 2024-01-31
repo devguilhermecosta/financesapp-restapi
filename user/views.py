@@ -19,8 +19,6 @@ class UserMixin:
 
 
 class UserRegisterAPIView(APIView, UserMixin):
-    permission_classes = [IsAuthenticated]
-
     def get_object(self, pk: int) -> User:
         user = get_object_or_404(
             User,
@@ -29,11 +27,14 @@ class UserRegisterAPIView(APIView, UserMixin):
         self.check_object_permissions(self.request, user)
         return user
 
-    @method_decorator(csrf_protect)
     def post(self, *args, **kwargs) -> Response:
         serializer = UserSerializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
+        data_return = {
+            k: v for k, v in serializer.data.items() if k != 'password'
+        }
 
         user_id = serializer.data.get('id', None)
         user_data = self.request.data
@@ -43,7 +44,7 @@ class UserRegisterAPIView(APIView, UserMixin):
         user.save()
 
         return Response(
-            data=serializer.data,
+            data=data_return,
             status=status.HTTP_201_CREATED,
         )
 
