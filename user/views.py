@@ -92,3 +92,17 @@ class UserListAPIView(APIView):
             data=serializer.data,
             status=status.HTTP_200_OK,
         )
+
+
+class UserLogoutAPIView(APIView):
+    def post(self, *args, **kwargs) -> Response:
+        response = Response()
+
+        try:
+            response.delete_cookie('token_refresh')
+            print('token deleted successfully.')
+        except Exception:
+            ...
+
+        response.status_code = status.HTTP_204_NO_CONTENT
+        return response
