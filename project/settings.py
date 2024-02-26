@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'user.apps.UserConfig',
+    'balance.apps.BalanceConfig',
 ]
 
 MIDDLEWARE = [

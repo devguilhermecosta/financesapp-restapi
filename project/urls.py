@@ -26,4 +26,5 @@ urlpatterns = [
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),  # noqa: E501
     path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),  # noqa: E501
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('api/balance/', include('balance.urls'), name='balance'),
 ]
